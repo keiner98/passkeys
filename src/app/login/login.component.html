@@ -1,0 +1,40 @@
+<form id="form" class="center" [formGroup]="formLogin">
+  <div class="mdc-text-field mdc-text-field--filled">
+    <span class="mdc-text-field__ripple"></span>
+    <label class="mdc-floating-label" id="username-label">username</label>
+    <!-- TODO: Add passkeys to the browser autofill: Enable conditional UI. -->
+    <input
+      type="text"
+      id="username"
+      class="mdc-text-field__input"
+      aria-labelledby="username-label"
+      formControlName="username"
+      name="username"
+      autocomplete="username webauthn"
+      autofocus
+    />
+    <span class="mdc-line-ripple"></span>
+  </div>
+  <div class="mdc-text-field mdc-text-field--filled hidden">
+    <span class="mdc-text-field__ripple"></span>
+    <label class="mdc-floating-label" id="password-label">password</label>
+    <input
+      type="password"
+      formControlName="password"
+      class="mdc-text-field__input"
+      aria-labelledby="password-label"
+      name="password"
+      autocomplete="current-password"
+      autofocus
+    />
+    <span class="mdc-line-ripple"></span>
+  </div>
+  <p class="instructions">Any username can be accepted.</p>
+  <button
+    type="submit"
+    [disabled]="formLogin.invalid"
+    (click)="form()"
+    class="mdc-button mdc-button--raised"
+    value="Next"
+  >LOGIN</button>
+</form>
