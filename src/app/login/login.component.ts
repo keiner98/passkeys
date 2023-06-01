@@ -42,19 +42,26 @@ export class LoginComponent implements OnInit {
     console.log(this.formLogin.value);
     this.http
       .post(
-        'https://access-control.mango-api-dev.com/v1/create-credential/carlos.orozco:users/carlos.orozco:current',
+        'https://access-control.mango-api-dev.com/v1/create-registration/carlos.orozco:users/carlos.orozco:current',
         {
           displayName: 'Cell phone',
         }
       )
       .subscribe((resp: any) => {
-        let options = { ...resp };
+        let options = { ...resp.data };
+        console.log('1',options);
         options.challenge = this.decode(options.challenge);
+        console.log(options);
         options.user.id = this.decode(options.user.id);
+        console.log(options);
         if (options.excludeCredentials) {
+          console.log(options);
+
           for (let cred of options.excludeCredentials) {
             cred.id = this.decode(cred.id);
           }
+          console.log(options);
+
         }
         console.log(options);
         // Use platform authenticator and discoverable credential.
@@ -97,8 +104,8 @@ export class LoginComponent implements OnInit {
               };
               console.log(credential);
               this.http.post(
-                'https://access-control.mango-api-dev.com/v1/save-credential/carlos.orozco:users/carlos.orozco:current',
-                { credential }
+                'https://access-control.mango-api-dev.com/v1/verify-registration/carlos.orozco:users/carlos.orozco:current',
+                { registration:credential }
               ).subscribe((resp)=>{
                 console.log(resp)
               });
