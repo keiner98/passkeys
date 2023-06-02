@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { startRegistration,startAuthentication } from '@simplewebauthn/browser';
+import {
+  startRegistration,
+  startAuthentication,
+} from '@simplewebauthn/browser';
 
 @Component({
   selector: 'app-login',
@@ -10,17 +13,30 @@ import { startRegistration,startAuthentication } from '@simplewebauthn/browser';
 })
 export class LoginComponent implements OnInit {
   formLogin!: FormGroup;
-  credentials:any[] = [];
+  credentials: any[] = [];
   constructor(private http: HttpClient, private fromBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.http.get('https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current').subscribe((resp:any)=>{
-      this.credentials = resp.data.credentials.allowCredentials;
-      startAuthentication(resp.data.credentials).then((respAuth)=>{
-        console.log(respAuth)
-      },error=>console.log(error));
-
-    });
+    this.http
+      .get(
+        'https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current'
+      )
+      .subscribe((resp: any) => {
+        this.credentials = resp.data.credentials.allowCredentials;
+        startAuthentication(resp.data.credentials).then(
+          (auth) => {
+            this.http
+              .post(
+                'https://access-control.mango-api-dev.com/v1/verify-authentication/carlos.orozco:users/carlos.orozco:current',
+                { auth }
+              )
+              .subscribe((resp: any) => {
+                console.log(resp);
+              });
+          },
+          (error) => console.log(error)
+        );
+      });
     this.formLogin = this.fromBuilder.group({
       username: ['', Validators.required],
       password: '',
@@ -42,9 +58,7 @@ export class LoginComponent implements OnInit {
     return bin.buffer;
   }
 
-  async authenticate() {
-
-  }
+  async authenticate() {}
 
   form() {
     console.log(this.formLogin.value);
