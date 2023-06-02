@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get('https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current').subscribe((resp:any)=>{
-      this.credentials = resp.data.credentials;
+      this.credentials = resp.data.credentials.allowCredentials;
     });
     this.formLogin = this.fromBuilder.group({
       username: ['', Validators.required],
