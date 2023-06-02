@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.http.get('https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current').subscribe((resp:any)=>{
       this.credentials = resp.data.credentials.allowCredentials;
-      startAuthentication(resp).then((respAuth)=>{
+      startAuthentication(resp.data).then((respAuth)=>{
         console.log(respAuth)
       },error=>console.log(error));
 
