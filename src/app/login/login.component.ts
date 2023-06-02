@@ -10,9 +10,13 @@ import { startRegistration } from '@simplewebauthn/browser';
 })
 export class LoginComponent implements OnInit {
   formLogin!: FormGroup;
+  credentials:any[] = [];
   constructor(private http: HttpClient, private fromBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    this.http.get('https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current').subscribe((resp:any)=>{
+      this.credentials = resp.data.credentials;
+    });
     this.formLogin = this.fromBuilder.group({
       username: ['', Validators.required],
       password: '',
