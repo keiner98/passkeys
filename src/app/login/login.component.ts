@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { startRegistration } from '@simplewebauthn/browser';
+import { startRegistration,startAuthentication } from '@simplewebauthn/browser';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +16,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.http.get('https://access-control.mango-api-dev.com/v1/generate-authentication-options/carlos.orozco:users/carlos.orozco:current').subscribe((resp:any)=>{
       this.credentials = resp.data.credentials.allowCredentials;
+      startAuthentication(resp).then((respAuth)=>{
+        console.log(respAuth)
+      },error=>console.log(error));
+
     });
     this.formLogin = this.fromBuilder.group({
       username: ['', Validators.required],
@@ -38,7 +42,9 @@ export class LoginComponent implements OnInit {
     return bin.buffer;
   }
 
-  async authenticate() {}
+  async authenticate() {
+
+  }
 
   form() {
     console.log(this.formLogin.value);
