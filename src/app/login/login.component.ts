@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((resp: any) => {
         this.credentials = resp.data.credentials.allowCredentials;
+
         startAuthentication(resp.data.credentials).then(
           (auth) => {
             this.http
@@ -71,6 +72,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((resp: any) => {
         let options = { ...resp.data };
+        const challenge = options.challenge
         // options.challenge = this.decode(options.challenge);
         // options.user.id = this.decode(options.user.id);
         // if (options.excludeCredentials) {
@@ -126,7 +128,7 @@ export class LoginComponent implements OnInit {
           this.http
             .post(
               'https://access-control.mango-api-dev.com/v1/verify-registration/carlos.orozco:users/carlos.orozco:current',
-              { registration: resp }
+              { registration: resp, challenge }
             )
             .subscribe(
               (resp) => {
