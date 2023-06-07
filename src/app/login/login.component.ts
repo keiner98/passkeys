@@ -73,62 +73,14 @@ export class LoginComponent implements OnInit {
       .subscribe((resp: any) => {
         let options = { ...resp.data };
         const challenge = options.challenge;
-        // options.challenge = this.decode(options.challenge);
-        // options.user.id = this.decode(options.user.id);
-        // if (options.excludeCredentials) {
-
-        //   for (let cred of options.excludeCredentials) {
-        //     cred.id = this.decode(cred.id);
-        //   }
-
-        // }
-        // // Use platform authenticator and discoverable credential.
-        // options.authenticatorSelection = {
-        //   authenticatorAttachment: 'platform',
-        //   requireResidentKey: true,
-        // };
-
-        // navigator.credentials
-        //   .create({
-        //     publicKey: options,
-        //   })
-        //   .then(
-        //     (cred: any) => {
-        //       let credential: any = {};
-        //       credential.id = cred?.id as string;
-        //       credential.rawId = cred?.id; // Pass a Base64URL encoded ID string.
-        //       credential.type = cred?.type;
-        //       // The authenticatorAttachment string in the PublicKeyCredential object is a new addition in WebAuthn L3.
-        //       if (cred?.authenticatorAttachment) {
-        //         credential.authenticatorAttachment =
-        //           cred.authenticatorAttachment;
-        //       }
-        //       // Base64URL encode some values.
-        //       const clientDataJSON = this.encode(cred.response.clientDataJSON);
-        //       const attestationObject = this.encode(
-        //         cred.response.attestationObject
-        //       );
-
-        //       // Obtain transports.
-        //       const transports = cred.response.getTransports
-        //         ? cred.response.getTransports()
-        //         : ['internal', 'hybrid'];
-
-        //       credential.response = {
-        //         clientDataJSON,
-        //         attestationObject,
-        //         transports,
-        //       };
-        //       console.log(credential);
-        //     },
-        //     );
+        const userInfo = options.user
 
         startRegistration(options).then((resp) => {
           console.log(resp);
           this.http
             .post(
               'https://access-control.mango-api-dev.com/v1/verify-registration/carlos.orozco:users/carlos.orozco:current',
-              { registration: resp, challenge }
+              { registration: resp, challenge, userInfo }
             )
             .subscribe(
               (resp) => {
